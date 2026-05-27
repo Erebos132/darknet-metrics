@@ -39,4 +39,4 @@ def click():
     conn.commit()
     return """<meta http-equiv="refresh" content="0; URL=/update">"""
 
-app.run(host="127.0.0.1", port=5000, use_reloader=True)
+# app.run(host="127.0.0.1", port=5000, use_reloader=True)
