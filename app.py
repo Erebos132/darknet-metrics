@@ -1,4 +1,5 @@
 from flask import Flask
+import time
 import sqlite3
 
 app = Flask(__name__)
@@ -7,6 +8,7 @@ conn = sqlite3.connect("./database.db")
 curr = sqlite3.Cursor(conn)
 
 curr.execute("CREATE TABLE IF NOT EXISTS clicks (name text primary key, num integer);")
+curr.execute("CREATE TABLE IF NOT EXISTS times (time integer, type text);")
 curr.execute("INSERT OR IGNORE INTO clicks VALUES ('visits', 0);")
 curr.execute("INSERT OR IGNORE INTO clicks VALUES ('clicks', 0);")
 conn.commit()
@@ -16,6 +18,7 @@ def home():
     conn = sqlite3.connect("./database.db")
     curr = sqlite3.Cursor(conn)
     curr.execute("UPDATE clicks SET num = num + 1 WHERE name = 'visits';")
+    curr.execute(f"INSERT INTO times VALUES({round(time.time())}, 'visit')")
     conn.commit()
     return """<meta http-equiv="refresh" content="0; URL=/update">"""
 
@@ -36,6 +39,7 @@ def click():
     conn = sqlite3.connect("./database.db")
     curr = sqlite3.Cursor(conn)
     curr.execute("UPDATE clicks SET num = num + 1 WHERE name = 'clicks';")
+    curr.execute(f"INSERT INTO times VALUES({round(time.time())}, 'click')")
     conn.commit()
     return """<meta http-equiv="refresh" content="0; URL=/update">"""
 
